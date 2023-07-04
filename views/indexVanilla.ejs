@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>BREAD</title>
+    <link rel="stylesheet" href="/stylesheets/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+    <link rel="stylesheet" href="fontawesome/css/all.css">
+
+</head>
+
+<body>
+    <br>
+    <div class="container">
+        <h1>BREAD(Browse,Read,Edit,Add,Delete)</h1>
+        <h2>Filters </h2>
+
+        <form id="form-search">
+
+            <div class="row mb-3">
+                <label for="id" class="col-sm-2 col-form-label">
+                    <input type="checkbox" id="checkboxId" name="checkboxId">
+                    ID</label>
+                <div class="col-sm-10">
+                    <input type="number" class="form-control" id="idFilter" name="id" placeholder="ID">
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label for="string" class="col-sm-2 col-form-label">
+                    <input type="checkbox" id="checkboxString" name="checkboxString">
+                    String</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="stringFilter" name="string" placeholder="String">
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label for="integer" class="col-sm-2 col-form-label">
+                    <input type="checkbox" id="checkboxInteger" name="checkboxInteger">
+                    Integer</label>
+                <div class="col-sm-10">
+                    <input type="number" class="form-control" id="integerFilter" name="integer" placeholder="Integer">
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label for="float" class="col-sm-2 col-form-label">
+                    <input type="checkbox" id="checkboxFloat" name="checkboxFloat">
+                    Float</label>
+                <div class="col-sm-10">
+                    <input type="number" class="form-control" id="floatFilter" step="any" name="Float"
+                        placeholder="Float">
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label class="col-sm-2 col-form-label" for="date">
+                    <input type="checkbox" id="checkboxDate" name="checkboxDate">
+                    Date</label>
+                <div class="col-sm-10">
+                    <input class="form-control" placeholder="Start Date" name="startDate" type="text"
+                        onfocus="(this.type='date')" onblur="(this.type='text')" id="startDate" />
+                    to
+                    <input class="form-control" placeholder="End Date" name="endDate" type="text"
+                        onfocus="(this.type='date')" onblur="(this.type='text')" id="endDate" />
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label for="boolean" class="col-sm-2 col-form-label">
+                    <input type="checkbox" id="checkboxBoolean" name="checkboxBoolean">
+                    Boolean</label>
+                <div class="col-sm-10">
+                    <select class="form-control" style="background-color: white;" name="boolean" id="booleanFilter">
+                        <option value="">Choose the boolean...</option>
+                        <option value="true">True</option>
+                        <option value="false">False</option>
+                    </select>
+                </div>
+            </div>
+            <br>
+
+            <button type="submit" class="btn btn-primary">Search</button>
+            <a type="button" class="btn btn-warning" href="/v">Reset</a>
+
+        </form>
+    </div>
+    <br>
+
+    <!-- TABEL START-->
+    <div class="container">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>No.
+                        <i class="fa-solid fa-sort" onClick="sortData('number', this)" isiData="number"></i>
+                    </th>
+                    <th>String
+                        <i class="fa-solid fa-sort" onClick="sortData('string', this)" isiData="string"></i>
+                    </th>
+                    <th>Integer
+                        <i class="fa-solid fa-sort" onClick="sortData('integer', this)" isiData="integer"></i>
+                    </th>
+                    <th>Float
+                        <i class="fa-solid fa-sort" onClick="sortData('float', this)" isiData="float"></i>
+                    </th>
+                    <th>Date
+                        <i class="fa-solid fa-sort" onClick="sortData('date', this)" isiData="date"></i>
+                    </th>
+                    <th>Boolean
+                        <i class="fa-solid fa-sort" onClick="sortData('boolean', this)" isiData="boolean"></i>
+                    </th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="sortingData">
+            <tbody>
+        </table>
+        <nav class="pagination" id="pagination1" aria-label="Page navigation example"></nav>
+        <button type="submit" onclick="showAdd()" class="btn btn-primary">Add</button>
+    </div>
+    <!-- TABEL FINISH -->
+
+    <!-- FORM ADD START-->
+    <br>
+    <div class="container">
+
+        <form id="create-form" style="display: none;">
+            <h1>Add Data</h1>
+            <input type="hidden" name="page" value="1">
+            <div class="row mb-3">
+                <label for="inputId" class="col-sm-2 col-form-label">ID</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="id" name="id" placeholder="ID">
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label for="inputStr" class="col-sm-2 col-form-label">String</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="string" name="string" placeholder="String">
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label for="inputInt" class="col-sm-2 col-form-label">Integer</label>
+                <div class="col-sm-10">
+                    <input type="number" class="form-control" id="integer" name="integer" placeholder="Integer">
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label for="inputFloat" class="col-sm-2 col-form-label">Float</label>
+                <div class="col-sm-10">
+                    <input type="number" class="form-control" id="float" step="any" name="float" placeholder="Float">
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label class="col-sm-2 col-form-label" for="inputDate">Date</label>
+                <div class="col-sm-10">
+                    <input class="form-control" type="date" id="date" name="date">
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label class="col-sm-2 col-form-label" for="inputBol">Boolean</label>
+                <div class="col-sm-10">
+                    <select class="form-control" style="background-color: white;" id="boolean" name="boolean">
+                        <option value="">Choose the boolean...</option>
+                        <option value="true">True</option>
+                        <option value="false">False</option>
+                    </select>
+                </div>
+            </div>
+            <br>
+
+            <button type="submit" class="btn btn-primary">Save</button>
+            <button type="button" class="btn btn-warning" onclick="closeAdd()">Close</button>
+        </form>
+        <br>
+    </div>
+    <!-- FORM ADD FINISH -->
+
+
+    <!-- FORM EDIT START -->
+    <br>
+    <div class="container">
+
+        <form id="edit-form" style="display: none;">
+            <h1>Edit Data</h1>
+
+            <div class="row mb-3" hidden>
+                <label for="idEdit" class="col-sm-2 col-form-label">ID</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="idEdit" name="id" disabled>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label for="idEdit" class="col-sm-2 col-form-label">Number</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="numberEdit" name="numberEdit" disabled>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label for="stringEdit" class="col-sm-2 col-form-label">String</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="stringEdit" name="string">
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label for="integerEdit" class="col-sm-2 col-form-label">Integer</label>
+                <div class="col-sm-10">
+                    <input type="number" class="form-control" id="integerEdit" name="integer">
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label for="floatEdit" class="col-sm-2 col-form-label">Float</label>
+                <div class="col-sm-10">
+                    <input type="number" class="form-control" id="floatEdit" step="any" name="float">
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label class="col-sm-2 col-form-label" for="dateEdit">Date</label>
+                <div class="col-sm-10">
+                    <input class="form-control" type="date" id="dateEdit" name="date">
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label class="col-sm-2 col-form-label" for="booleanEdit">Boolean</label>
+                <div class="col-sm-10">
+                    <select class="form-control" style="background-color: white;" id="booleanEdit" name="boolean">
+                        <option value="">Choose the boolean...</option>
+                        <option value="true">True</option>
+                        <option value="false">False</option>
+                    </select>
+                </div>
+            </div>
+            <br>
+
+            <button type="submit" class="btn btn-primary">Update</button>
+        </form>
+        <br>
+    </div>
+    <!-- FORM EDIT FINSIH -->
+
+
+    <script>
+        let params = {
+            page: 1
+        }
+
+        $(document).ready(function () {
+            sort('number', 'asc')
+
+            $('#form-search').submit(function (event) {
+                event.preventDefault()
+                searchData()
+            })
+        })
+
+        $(document).ready(() => {
+            $('#create-form').submit((event) => {
+                event.preventDefault();
+                const number = $('#id').val()
+                const string = $('#string').val()
+                const integer = $('#integer').val()
+                const float = $('#float').val()
+                const date = $('#date').val()
+                const boolean = $('#boolean').val()
+                addData(number, string, integer, float, date, boolean)
+            })
+        });
+
+        $(document).ready(() => {
+            $('#edit-form').submit(function (event) {
+                event.preventDefault();
+                const id = $('#idEdit').val();
+                const number = $('#numberEdit').val();
+                const string = $('#stringEdit').val();
+                const integer = $('#integerEdit').val();
+                const float = $('#floatEdit').val();
+                const date = $('#dateEdit').val();
+                const boolean = $('#booleanEdit').val();
+                updateData(id, number, string, integer, float, date, boolean);
+            });
+        });
+
+        const loadData = () => {
+            $.ajax({
+                url: '/users',
+                data: params,
+                dataType: 'json'
+            }).done(function (data) {
+                let html = ``
+                data.datas.forEach(data => {
+                    html += `
+          <tr>
+                <td>${data.number}</td>
+                <td>${data.string}</td>
+                <td>${data.integer}</td>
+                <td>${data.float}</td>
+                <td>${moment(data.date).format('DD-MMM-YYYY')}</td>
+                <td>${data.boolean}</td>
+                <td>
+            <button class="btn btn-primary" onclick="editData('${data._id}')"><i class="fa-solid fa-pencil"></i></button>
+            <button class="btn btn-danger"  onclick="deleteData('${data._id}')"><i class="fa-solid fa-trash-can"></i></button>
+          </td>
+          </tr>
+          `
+                });
+                $('table tbody').html(html)
+                params = { ...params, page: data.page, pages: data.pages }
+                generatePagination(params)
+            })
+        }
+
+        const generatePagination = ({ page, pages }) => {
+            let html = `<ul class="pagination">`
+
+            if (page > 1)
+                html += `
+              <li class="page-item">
+                <a class="page-link" href="javascript:void(0)" aria-label="Previous" onClick="changePage(${page - 1})">
+                  <span aria-hidden="true">Previous</span>
+                </a>
+              </li>
+              `
+
+            for (let i = 1; i <= pages; i++) {
+                html += `<li class="page-item${page == i ? ' active' : ''}"><a class="page-link" href="javascript:void(0)" onClick="changePage(${i})">${i}</a></li>`
+            }
+
+            if (page < pages)
+                html += `
+          <li class="page-item">
+            <a class="page-link" href="javascript:void(0)" aria-label="Next" onClick="changePage(${page + 1})">
+              <span aria-hidden="true">Next</span>
+            </a>
+          </li>
+          `
+
+            html += `</ul>`
+
+            $('#pagination').html(html)
+        }
+
+        const changePage = page => {
+            params = { ...params, page }
+            loadData()
+        }
+
+        const addData = (number, string, integer, float, date, boolean) => {
+            $.ajax({
+                method: 'POST',
+                url: '/users',
+                data: { number, string, integer, float, date, boolean }
+            }).done((data) => {
+                $('#id').val('');
+                $('#string').val('');
+                $('#integer').val('');
+                $('#float').val('');
+                $('#date').val('');
+                $('#boolean').val('');
+                loadData();
+                toggleAddData();
+            }).fail((error) => {
+                console.log(error);
+            });
+        };
+
+        const editData = (id) => {
+            $.ajax({
+                method: 'GET',
+                url: `/users/edit/${id}`,
+                dataType: 'json',
+            }).done(function (data) {
+                $('#idEdit').val(data._id);
+                $('#numberEdit').val(data.number)
+                $('#stringEdit').val(data.string);
+                $('#integerEdit').val(data.integer);
+                $('#floatEdit').val(data.float);
+                $('#dateEdit').val(moment(data.date).format('YYYY-MM-DD'));
+                $('#booleanEdit').val(data.boolean.toString());
+                $('#edit-form').show();
+            }).fail(function (error) {
+                console.error(error);
+            });
+        };
+
+
+        const updateData = (id, number, string, integer, float, date, boolean) => {
+            $.ajax({
+                method: 'PUT',
+                url: `/users/${id}`,
+                contentType: 'application/json',
+                data: JSON.stringify({ number, string, integer, float, date, boolean }),
+                success: (data) => {
+                    $('#numberEdit').val(data.number);
+                    $('#stringEdit').val('');
+                    $('#integerEdit').val('');
+                    $('#floatEdit').val('');
+                    $('#dateEdit').val('');
+                    $('#booleanEdit').val('');
+                    loadData();
+                    $('#edit-form').hide();
+                },
+                error: (error) => {
+                    console.log(error);
+                }
+            });
+        };
+
+
+        const deleteData = (id) => {
+            $.ajax({
+                method: 'DELETE',
+                url: `users/${id}`,
+                data: { id }
+            }).done((data) => {
+                loadData()
+            }).fail((error) => {
+                console.error(error);
+            })
+        };
+
+        const searchData = () => {
+            const number = $('#idFilter').val();
+            const checkboxId = $('#checkboxId').prop('checked');
+            const string = $('#stringFilter').val();
+            const checkboxString = $('#checkboxString').prop('checked');
+            const integer = $('#integerFilter').val();
+            const checkboxInteger = $('#checkboxInteger').prop('checked');
+            const float = $('#floatFilter').val();
+            const checkboxFloat = $('#checkboxFloat').prop('checked');
+            const startDate = $('#startDate').val();
+            const endDate = $('#endDate').val();
+            const checkboxDate = $('#checkboxDate').prop('checked');
+            const boolean = $('#booleanFilter').val();
+            const checkboxBoolean = $('#checkboxBoolean').prop('checked');
+            params = { ...params, number, checkboxId: checkboxId, string, checkboxString: checkboxString, integer, checkboxInteger: checkboxInteger, float, checkboxFloat: checkboxFloat, startDate, endDate, checkboxDate: checkboxDate, boolean, checkboxBoolean: checkboxBoolean }
+            loadData()
+        }
+
+        const sort = (sortBy, sortMode) => {
+
+            let html = ` <tr>
+                    <th>No <i class="fa-solid fa-sort${sortBy == 'number' ? sortMode == 'asc' ? '-up' : '-down' : ''}" onClick="sort('number','${sortMode == 'asc' ? 'desc' : 'asc'}')"></i></th>
+                    <th>String <i class="fa-solid fa-sort${sortBy == 'string' ? sortMode == 'asc' ? '-up' : '-down' : ''}" onClick="sort('string','${sortMode == 'asc' ? 'desc' : 'asc'}')"></i></th>
+                    <th>Integer <i class="fa-solid fa-sort${sortBy == 'integer' ? sortMode == 'asc' ? '-up' : '-down' : ''}" onClick="sort('integer','${sortMode == 'asc' ? 'desc' : 'asc'}')"></i></th>
+                    <th>Float <i class="fa-solid fa-sort${sortBy == 'float' ? sortMode == 'asc' ? '-up' : '-down' : ''}" onClick="sort('float','${sortMode == 'asc' ? 'desc' : 'asc'}')"></i></th>
+                    <th>Date <i class="fa-solid fa-sort${sortBy == 'date' ? sortMode == 'asc' ? '-up' : '-down' : ''}" onClick="sort('date','${sortMode == 'asc' ? 'desc' : 'asc'}')"></i></th>
+                    <th>Boolean <i class="fa-solid fa-sort${sortBy == 'boolean' ? sortMode == 'asc' ? '-up' : '-down' : ''}" onClick="sort('boolean','${sortMode == 'asc' ? 'desc' : 'asc'}')"></i></th>
+                    <th>Actions</th>
+                </tr> `
+            $('#sorting').html(html)
+            params = { ...params, sortBy, sortMode }
+            loadData()
+        }
+        const showAdd = () => {
+            $('#form-add').show()
+        };
+
+        const closeAdd = () => {
+            $('#form-add').hide()
+        };
+
+
+    </script>
+
+</body>
+
+</html>
